@@ -44,23 +44,40 @@ export const create = ({ user, body }, res, next) =>{
     .catch(next);
 }
 
-export const index = ({ querymen: { query, select, cursor } }, res, next) =>
+export const index = ({ user, querymen: { query, select, cursor } }, res, next) =>{
+  query['user'] = user.id;
   Launchy.find(query, select, cursor)
-    .populate('user')
+    .populate('monitor')
     .then((launchies) => launchies.map((launchy) => launchy.view()))
     .then(success(res))
-    .catch(next)
+    .catch(next);
+}
 
-export const show = ({ params }, res, next) =>
+export const show = ({ params }, res, next) => {
+  let l, r;
   Launchy.findById(params.id)
     .populate(['user', 'monitor'])
     .then(notFound(res))
     .then((launchy) => {
       console.log(`launchy show start\nstep 0 launchy: ${util.inspect(launchy)}`);
+      l = launchy
       return launchy? crawl(launchy.monitor): null
+    })
+    .then((result) =>{
+      r = result;
+      console.log(`step 1 result: ${result}`);
+      return Monitor.findById(l.monitor.id)
+    })
+    .then((monitor) =>{
+      if(monitor){
+        monitor.value = r;
+        console.log(`step 2 monitor: ${monitor}`);
+        return monitor.save();
+      }
     })
     .then(success(res))
     .catch(next)
+  }
 
 export const update = ({ user, bodymen: { body }, params }, res, next) =>
   Launchy.findById(params.id)
