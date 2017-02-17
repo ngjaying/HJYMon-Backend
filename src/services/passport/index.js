@@ -9,7 +9,6 @@ import * as googleService from '../google'
 import User, { schema } from '../../api/user/model'
 
 export const password = () => (req, res, next) => {
-  console.log(req);
   passport.authenticate('password', { session: false }, (err, user, info) => {
     if (err && err.param) {
       return res.status(400).json(err)
