@@ -14,7 +14,8 @@ const util = require('util')
 export const crawl = ({charset, url, jqpath}) => {
   console.log(`start crawl`);
   console.log(`step 0: ${util.inspect({charset, url, jqpath})}`);
-  let result = [];
+  let value = [];
+  let title = '';
   let c = charset;
   reqOptions.url = url;
   return req.get(reqOptions)
@@ -41,8 +42,9 @@ export const crawl = ({charset, url, jqpath}) => {
 
       let $ = cheerio.load(body);
       $(jqpath).each((i, elem) => {
-        result.push($(elem).text().replace(/[\r\n]/g, '').trim());
+        value.push($(elem).text().replace(/[\r\n]/g, '').trim());
       });
-      return result;
+      title = $("title").text();
+      return {title: title, value: value};
     });
 }

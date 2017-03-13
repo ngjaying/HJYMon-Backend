@@ -25,7 +25,6 @@ export const create = ({ user, body }, res, next) =>{
   Monitor.findOne({...body})
     .then((monitor) => {
       console.log(`step 1 monitor: ${monitor}`);
-      m = monitor;
       if(!monitor)
         return Monitor.create({...body});
     })
@@ -70,10 +69,15 @@ export const show = ({ params }, res, next) => {
     })
     .then((monitor) =>{
       if(monitor){
-        monitor.value = r;
+        monitor.title = r.title
+        monitor.value = r.value;
         console.log(`step 2 monitor: ${monitor}`);
         return monitor.save();
       }
+    })
+    .then((monitor) => {
+      l.blockname = l.blockname || monitor.title;
+      return l;
     })
     .then(success(res))
     .catch(next)

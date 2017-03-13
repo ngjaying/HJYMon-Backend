@@ -6,6 +6,7 @@ const launchySchema = new Schema({
     ref: 'User',
     required: true
   },
+  blockname: String,
   monitor: {
     type: Schema.ObjectId,
     ref: 'Monitor'
@@ -20,6 +21,7 @@ launchySchema.methods = {
       // simple view
       id: this.id,
       user: this.user.view(full),
+      blockname: this.blockname || this.monitor.title,
       monitor: this.monitor.view(full),
       createdAt: this.createdAt,
       updatedAt: this.updatedAt

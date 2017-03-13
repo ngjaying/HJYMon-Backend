@@ -13,6 +13,7 @@ const monitorSchema = new Schema({
 		minlength: 1,
     trim: true
 	},
+  title: String,
   value: String,
 	oldMD5: String,
   launchies: [{
@@ -32,6 +33,7 @@ monitorSchema.methods = {
       id: this.id,
       url: this.url,
       jqpath: this.jqpath,
+      title: this.title,
       value: this.value,
       oldMD5: this.oldMD5,
       launchies: this.launchies
