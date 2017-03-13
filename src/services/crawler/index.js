@@ -13,14 +13,12 @@ let reqOptions = {
 const util = require('util')
 export const crawl = ({charset, url, jqpath}) => {
   console.log(`start crawl`);
-  console.log(`step 0: ${util.inspect({charset, url, jqpath})}`);
   let value = [];
   let title = '';
   let c = charset;
   reqOptions.url = url;
   return req.get(reqOptions)
     .then((body) => {
-      console.log(`step 1: ${util.inspect(body)}`);
       if (!c) {
         let arr = String(body).match(/<meta([^>]*?)>/g);
         if (arr) {
@@ -39,12 +37,11 @@ export const crawl = ({charset, url, jqpath}) => {
       if (c) {
         body = iconv.decode(new Buffer(body), c);
       }
-
       let $ = cheerio.load(body);
       $(jqpath).each((i, elem) => {
         value.push($(elem).text().replace(/[\r\n]/g, '').trim());
       });
       title = $("title").text();
-      return {title: title, value: value};
+      return {title: title, value: value.join('|')};
     });
 }
