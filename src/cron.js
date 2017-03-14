@@ -5,9 +5,8 @@ import Monitor from './api/monitor/model';
 import { crawl } from './services/crawler'
 const util = require('util');
 export default function cron(){
-  later.date.localtime();
-  let s = later.parse.text('at 01:00am every day');
-  //let s = later.parse.recur().every(30).second();  
+  let s = later.parse.text('at 05:30pm every day');
+  //let s = later.parse.recur().every(30).second();
   later.setInterval(() => {
     console.log('crawling');
     //TODO paging here
