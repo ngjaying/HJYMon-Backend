@@ -12,13 +12,13 @@ export default (routes) => {
   const app = express()
 
   /* istanbul ignore next */
-  if (env === 'production') {
-    app.set('forceSSLOptions', {
-      enable301Redirects: false,
-      trustXFPHeader: true
-    })
-    app.use(forceSSL)
-  }
+  // if (env === 'production') {
+  //   app.set('forceSSLOptions', {
+  //     enable301Redirects: false,
+  //     trustXFPHeader: true
+  //   })
+  //   app.use(forceSSL)
+  // }
 
   /* istanbul ignore next */
   if (env === 'production' || env === 'development') {
