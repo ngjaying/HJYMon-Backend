@@ -31,7 +31,7 @@ export const create = ({ user, body }, res, next) =>{
     .then((monitor) => {
       console.log(`step 2 monitor: ${monitor}`);
       m = monitor;
-      return Launchy.create({ monitor, user });
+      return Launchy.create({ monitor, user, blockname: body.blockname || '' });
     })
     .then((launchy) => {
       console.log(`step 3 launchy: ${launchy}`);
