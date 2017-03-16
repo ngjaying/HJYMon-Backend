@@ -5,8 +5,12 @@ import Monitor from './api/monitor/model';
 import { crawl } from './services/crawler'
 const util = require('util');
 export default function cron(){
-  let s = later.parse.text('at 05:30pm every day');
+  let s = later.parse.recur().on(17,30).hour();
   //let s = later.parse.recur().every(30).second();
+  let occurrences = later.schedule(s).next(10);
+  for(let o of occurrences){
+    console.log(o);
+  }
   later.setInterval(() => {
     console.log('crawling');
     //TODO paging here
@@ -26,8 +30,8 @@ const crawlMonitor = (monitor) => {
       console.log(`crawl ${monitor.id}, update value`);
       monitor.value = result.value;
       monitor.oldMD5 = currentMD5;
+      monitor.title = result.title;
+      monitor.save();
     }
-    monitor.title = result.title;
-    monitor.save();
   });
 }

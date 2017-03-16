@@ -68,15 +68,19 @@ export const show = ({ params }, res, next) => {
       return Monitor.findById(l.monitor.id)
     })
     .then((monitor) =>{
-      if(monitor){
+      if(monitor && monitor.value != r.value){
         monitor.title = r.title
         monitor.value = r.value;
         console.log(`step 2 monitor: ${monitor}`);
         return monitor.save();
+      }else{
+        return monitor;
       }
     })
     .then((monitor) => {
-      l.blockname = l.blockname || monitor.title;
+      if(!l.blockname){
+        l.blockname = monitor.title;
+      }
       return l;
     })
     .then(success(res))
