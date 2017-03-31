@@ -5,8 +5,8 @@ import Monitor from './api/monitor/model';
 import { crawl, jpush } from './services/crawler'
 const util = require('util');
 export default function cron(){
-  //let s = later.parse.recur().on(17,30).hour();
-  let s = later.parse.recur().every(30).second();
+  let s = later.parse.recur().on(17,30).hour();
+  //let s = later.parse.recur().every(30).second();
   let occurrences = later.schedule(s).next(10);
   for(let o of occurrences){
     console.log(o);
@@ -47,6 +47,6 @@ const crawlMonitor = (monitor) => {
           return jpush({jpushids, notification: `${monitor.title}有更新`, message: monitor.value.substring(0, 100)});
         }
       });
-    }    
+    }
   });
 }
