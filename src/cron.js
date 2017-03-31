@@ -2,11 +2,11 @@ import later from 'later';
 import mongoose from './services/mongoose';
 import md5 from 'md5';
 import Monitor from './api/monitor/model';
-import { crawl } from './services/crawler'
+import { crawl, jpush } from './services/crawler'
 const util = require('util');
 export default function cron(){
-  let s = later.parse.recur().on(17,30).hour();
-  //let s = later.parse.recur().every(30).second();
+  //let s = later.parse.recur().on(17,30).hour();
+  let s = later.parse.recur().every(30).second();
   let occurrences = later.schedule(s).next(10);
   for(let o of occurrences){
     console.log(o);
@@ -32,6 +32,21 @@ const crawlMonitor = (monitor) => {
       monitor.oldMD5 = currentMD5;
       monitor.title = result.title;
       monitor.save();
-    }
+      Monitor.findById(monitor.id).populate('launchies').then((monitor) => {
+        console.log(`monitor value: ${monitor}`);
+        return Monitor.populate(monitor, {path: 'launchies.user', model: 'User'});
+      }).then((monitor) => {
+        let jpushids = [];
+        for(let launchy of monitor.launchies){
+          console.log(`launchy:${launchy}`);
+          if(launchy.user.jpushid)
+            jpushids.push(launchy.user.jpushid);
+        }
+        console.log(`jpushids ${jpushids}`);
+        if(jpushids.length > 0){
+          return jpush({jpushids, notification: `${monitor.title}有更新`, message: monitor.value.substring(0, 100)});
+        }
+      });
+    }    
   });
 }

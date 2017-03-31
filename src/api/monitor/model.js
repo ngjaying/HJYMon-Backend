@@ -18,7 +18,7 @@ const monitorSchema = new Schema({
 	oldMD5: String,
   launchies: [{
     type: Schema.ObjectId,
-    ref: 'launchy'
+    ref: 'Launchy'
   }]
 }, {
   timestamps: true

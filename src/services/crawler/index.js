@@ -58,11 +58,12 @@ export const jpush = ({jpushids, notification, message}) => {
       },
       body: JSON.stringify({
           'platform': 'all',
-          'audience': 'all',
-    //      audience: {registration_id: jpushids},
+          //'audience': 'all',
+          'audience': {registration_id: jpushids},
           'notification': {'alert': notification},
           'message': { 'msg_content': message}
       })
   };
+  console.log(options.body);
   return req.post(options);
 }
