@@ -1,6 +1,7 @@
 import req from 'request-promise';
 import cheerio from 'cheerio';
 import iconv from 'iconv-lite';
+import { jpushKey, jpushMaster } from '../../config'
 let reqOptions = {
   headers: {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1)' +
@@ -44,4 +45,24 @@ export const crawl = ({charset, url, jqpath}) => {
       title = $("title").text();
       return {title: title, value: value.join('|')};
     });
+}
+
+export const jpush = ({jpushids, notification, message}) => {
+  console.log(message);
+  let auth = 'Basic ' + new Buffer(`${jpushKey}:${jpushMaster}`).toString("base64");
+  let options = {
+      uri: 'https://api.jpush.cn/v3/push',
+      headers : {
+        'Authorization' : auth,
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify({
+          'platform': 'all',
+          'audience': 'all',
+    //      audience: {registration_id: jpushids},
+          'notification': {'alert': notification},
+          'message': { 'msg_content': message}
+      })
+  };
+  return req.post(options);
 }

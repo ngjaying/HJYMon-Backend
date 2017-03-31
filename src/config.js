@@ -27,6 +27,8 @@ const config = {
     sendgridKey: requireProcessEnv('SENDGRID_KEY'),
     masterKey: requireProcessEnv('MASTER_KEY'),
     jwtSecret: requireProcessEnv('JWT_SECRET'),
+    jpushKey: requireProcessEnv('JPUSH_APPKEY'),
+    jpushMaster: requireProcessEnv('JPUSH_MASTER'),
     mongo: {
       options: {
         db: {
